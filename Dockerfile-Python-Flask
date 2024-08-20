@@ -1,0 +1,26 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Create and set the working directory
+WORKDIR /usr/src/app
+
+# Copy requirements.txt and install dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application source code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 5000
+
+# Set the environment variable for the application
+ENV FLASK_ENV=production
+
+# Start the application with Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+
+# Optionally define health check
+HEALTHCHECK --interval=30s --timeout=10s \
+  CMD curl -f http://localhost:5000/health || exit 1
+
