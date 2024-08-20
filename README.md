@@ -31,9 +31,6 @@ Welcome to the **Sample Dockerfiles** repository! This collection features Docke
 - **Static HTML/CSS/JavaScript Website**: 
   Dockerfile for serving static websites with NGINX. 🌟
 
-- **Python Django Application**: 
-  Dockerfile for Django python applications with Required component 🎯
-
 These Dockerfiles serve as templates to streamline your development process and ensure a consistent deployment environment. Customize them as needed to match the requirements of your projects.
 
 ## Getting Started 🚀
@@ -41,6 +38,7 @@ These Dockerfiles serve as templates to streamline your development process and 
 Check out the individual Dockerfile sections for detailed instructions on how to build and run each application.
 
 Feel free to explore, use, and adapt these Dockerfiles for your own needs!
+
 
 
 
