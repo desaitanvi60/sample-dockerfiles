@@ -1,0 +1,32 @@
+# Use an official Ruby image
+FROM ruby:3.2-slim
+
+# Install dependencies
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy Gemfile and Gemfile.lock and install gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --without development test
+
+# Copy application source code
+COPY . .
+
+# Precompile assets
+RUN bundle exec rake assets:precompile
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Set the environment variable for the application
+ENV RAILS_ENV=production
+
+# Start the Rails server
+CMD ["rails", "server", "-b", "0.0.0.0"]
+
+# Optionally define health check
+HEALTHCHECK --interval=30s --timeout=10s \
+  CMD curl -f http://localhost:3000/health || exit 1
+
