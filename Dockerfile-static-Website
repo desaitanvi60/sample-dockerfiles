@@ -1,0 +1,22 @@
+# Use an official Nginx image as a parent image
+FROM nginx:alpine
+
+# Set the working directory
+WORKDIR /usr/share/nginx/html
+
+# Remove the default Nginx welcome page
+RUN rm /usr/share/nginx/html/index.html
+
+# Copy static files into the Nginx server directory
+COPY . .
+
+# Expose port 80 for the web server
+EXPOSE 80
+
+# Optionally define a health check
+HEALTHCHECK --interval=30s --timeout=10s \
+  CMD curl -f http://localhost || exit 1
+
+# Start Nginx in the foreground
+CMD ["nginx", "-g", "daemon off;"]
+
