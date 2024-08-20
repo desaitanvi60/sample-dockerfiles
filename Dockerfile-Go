@@ -1,0 +1,41 @@
+# Build stage
+FROM golang:1.20 AS build
+
+# Set the working directory
+WORKDIR /app
+
+# Copy go.mod and go.sum and download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the rest of the code
+COPY . .
+
+# Build the Go application
+RUN go build -o myapp .
+
+# Runtime stage
+FROM alpine:latest
+
+# Install necessary packages
+RUN apk --no-cache add ca-certificates
+
+# Set the working directory
+WORKDIR /root/
+
+# Copy the compiled Go binary
+COPY --from=build /app/myapp .
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Set the environment variable for the application
+ENV ENV=production
+
+# Start the application
+CMD ["./myapp"]
+
+# Optionally define health check
+HEALTHCHECK --interval=30s --timeout=10s \
+  CMD curl -f http://localhost:8080/health || exit 1
+
